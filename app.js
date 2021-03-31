@@ -12,7 +12,6 @@ const jwt = require('jsonwebtoken');
 // import passport and passport-jwt modules
 const passport = require('passport');
 const passportJWT = require('passport-jwt');
-const { send } = require('process');
 
 // create some helper functions to work on the database
 const createUser = async ({name, email, password }) => {
@@ -96,7 +95,7 @@ app.post('/auth', async function(req, res, next) {
         let payload = {name: user.name, id: user.id };
         let token = jwt.sign(payload, jwtOptions.secretOrKey);
         req.user = jwt.verify(token, jwtOptions.secretOrKey);
-        // const token = jwt.sign({id}, process.env.SECRET_TOKEN);
+        // const token = jwt.sign({id}, process.env.SECRET_TOKEN); // require dotenv
         res.header('auth-token', token).send( {token:token} );
       } else {
         res.status(401).json({ msg: 'invalid user' });
@@ -125,6 +124,7 @@ app.post('/auth/logout', async function(req, res, next) {
 const base64url = require('base64url');
 // get one user
 app.get('/users/me', async function(req, res) {  
+//    x = token
 //    let y =  base64url.decode(x)
 //    y = JSON.parse(y)
 //    res.send(y.name)
